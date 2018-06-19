@@ -77,7 +77,8 @@ class IStrategy(ABC):
         :param dataframe: Raw data from the exchange and parsed by parse_ticker_dataframe()
         :return: a Dataframe with all mandatory indicators for the strategies
         """
-        warnings.warn("deprecated - please replace this method with advise_indicators!", DeprecationWarning)
+        warnings.warn("deprecated - please replace this method with advise_indicators!",
+                      DeprecationWarning)
         return dataframe
 
     def populate_buy_trend(self, dataframe: DataFrame) -> DataFrame:
@@ -86,7 +87,8 @@ class IStrategy(ABC):
         :param dataframe: DataFrame
         :return: DataFrame with buy column
         """
-        warnings.warn("deprecated - please replace this method with advise_buy!", DeprecationWarning)
+        warnings.warn("deprecated - please replace this method with advise_buy!",
+                      DeprecationWarning)
         dataframe.loc[(), 'buy'] = 0
         return dataframe
 
@@ -96,7 +98,8 @@ class IStrategy(ABC):
         :param dataframe: DataFrame
         :return: DataFrame with sell column
         """
-        warnings.warn("deprecated - please replace this method with advise_sell!", DeprecationWarning)
+        warnings.warn("deprecated - please replace this method with advise_sell!",
+                      DeprecationWarning)
         dataframe.loc[(), 'sell'] = 0
         return dataframe
 
