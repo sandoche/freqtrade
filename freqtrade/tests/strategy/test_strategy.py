@@ -9,7 +9,6 @@ from freqtrade.strategy import import_strategy
 from freqtrade.strategy.default_strategy import DefaultStrategy
 from freqtrade.strategy.interface import IStrategy
 from freqtrade.strategy.resolver import StrategyResolver
-from freqtrade.tests.conftest import log_has
 
 
 def test_import_strategy(caplog):
@@ -76,7 +75,8 @@ def test_load_strategy_invalid_directory(result, caplog):
     ) in caplog.record_tuples
 
     assert hasattr(resolver.strategy, 'populate_indicators')
-    assert 'adx' in resolver.strategy.populate_indicators(result)
+    assert hasattr(resolver.strategy, 'advise_indicators')
+    assert 'adx' in resolver.strategy.advise_indicators(result, 'ETH/BTC')
 
 
 def test_load_not_found_strategy():
@@ -91,7 +91,7 @@ def test_strategy(result):
     config = {'strategy': 'DefaultStrategy'}
 
     resolver = StrategyResolver(config)
-
+    pair = 'ETH/BTC'
     assert hasattr(resolver.strategy, 'minimal_roi')
     assert resolver.strategy.minimal_roi[0] == 0.04
     assert config["minimal_roi"]['0'] == 0.04
@@ -104,15 +104,16 @@ def test_strategy(result):
     assert resolver.strategy.ticker_interval == '5m'
     assert config['ticker_interval'] == '5m'
 
-    assert hasattr(resolver.strategy, 'populate_indicators')
-    assert 'adx' in resolver.strategy.populate_indicators(result)
+    assert hasattr(resolver.strategy, 'advise_indicators')
+    df_indicators = resolver.strategy.advise_indicators(result, pair=pair)
+    assert 'adx' in df_indicators
 
-    assert hasattr(resolver.strategy, 'populate_buy_trend')
-    dataframe = resolver.strategy.populate_buy_trend(resolver.strategy.populate_indicators(result))
+    assert hasattr(resolver.strategy, 'advise_buy')
+    dataframe = resolver.strategy.advise_buy(df_indicators, pair=pair)
     assert 'buy' in dataframe.columns
 
-    assert hasattr(resolver.strategy, 'populate_sell_trend')
-    dataframe = resolver.strategy.populate_sell_trend(resolver.strategy.populate_indicators(result))
+    assert hasattr(resolver.strategy, 'advise_sell')
+    dataframe = resolver.strategy.advise_sell(df_indicators, pair='ETH/BTC')
     assert 'sell' in dataframe.columns
 
 
