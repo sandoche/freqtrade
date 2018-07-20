@@ -280,10 +280,8 @@ class IStrategy(ABC):
 
     def advise_indicators(self, dataframe: DataFrame, pair: str) -> DataFrame:
         """
-
-        This wraps around the internal method
-
         Populate indicators that will be used in the Buy and Sell strategy
+        If not overridden, calls the legacy method `populate_indicators to keep strategies working
         :param dataframe: Raw data from the exchange and parsed by parse_ticker_dataframe()
         :param pair: The currently traded pair
         :return: a Dataframe with all mandatory indicators for the strategies
@@ -293,6 +291,7 @@ class IStrategy(ABC):
     def advise_buy(self, dataframe: DataFrame, pair: str) -> DataFrame:
         """
         Based on TA indicators, populates the buy signal for the given dataframe
+        If not overridden, calls the legacy method `populate_buy_trend to keep strategies working
         :param dataframe: DataFrame
         :param pair: The currently traded pair
         :return: DataFrame with buy column
@@ -303,6 +302,7 @@ class IStrategy(ABC):
     def advise_sell(self, dataframe: DataFrame, pair: str) -> DataFrame:
         """
         Based on TA indicators, populates the sell signal for the given dataframe
+        If not overridden, calls the legacy method `populate_sell_trend to keep strategies working
         :param dataframe: DataFrame
         :param pair: The currently traded pair
         :return: DataFrame with sell column
